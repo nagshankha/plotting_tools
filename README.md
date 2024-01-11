@@ -1,2 +1,1 @@
-# plotting_tools
-Matplotlib plotting toolkit
+# Matplotlib plotting toolkit
