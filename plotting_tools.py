@@ -214,25 +214,55 @@ class PlottingTools(EmptyClass):
                                           gs_span1_tuple[0]:gs_span1_tuple[1]],
                                           **kwargs)
    
-   def add_twin_axis(self, axis_name_to_twin, ax_twin='x'):
+   def add_twin_axis(self, axis_name_to_twin, ax_twin='x', spline_shift=1.0):
       
       if not hasattr(self, axis_name_to_twin):
          raise ValueError('The axis requested to twin does not exist')
-         
+
+      if axis_name_to_twin[-7:-1] in ['_twinx', '_twiny']:
+         raise RuntimeError('It is not possible to twin an already twinned axis '+
+                            'with this method')
+      largest_twin_index = 0   
       if ax_twin == 'x':
-         if axis_name_to_twin[-6:] == '_twinx':
-            raise RuntimeError('It is not possible to have more than one '+
-                               'twinx axis with this method')
+         for att in self.__dict__:
+            if att[:-1] == axis_name_to_twin+'_twinx':
+               largest_twin_index = max(largest_twin_index, int(att[-1]))
+         if largest_twin_index == 3:
+            raise RuntimeError('It is not possible to have more than three '+
+                               'twinx axes for any given axis with this method')
          else:
-            self.__dict__[axis_name_to_twin+'_twinx'] = self.__dict__[
+            largest_twin_index += 1
+            new_twin_axis_name = axis_name_to_twin+f'_twinx{largest_twin_index}'
+            self.__dict__[new_twin_axis_name] = self.__dict__[
                                            axis_name_to_twin].twinx()
+            if spline_shift >= 1.0:
+               self.__dict__[new_twin_axis_name].spines.right.set_position(
+                                                      ("axes", spline_shift))
+            elif spline_shift < 0.0:
+               self.__dict__[new_twin_axis_name].spines.left.set_position(
+                                                      ("axes", spline_shift))
+            else:
+               raise ValueError('spline_shift must be <0 or >=1')
       elif ax_twin == 'y':
-         if axis_name_to_twin[-6:] == '_twiny':
-            raise RuntimeError('It is not possible to have more than one '+
-                               'twiny axis with this method')
+         for att in self.__dict__:
+            if att[:-1] == axis_name_to_twin+'_twiny':
+               largest_twin_index = max(largest_twin_index, int(att[-1]))
+         if largest_twin_index == 3:
+            raise RuntimeError('It is not possible to have more than three '+
+                               'twiny axes for any given axis with this method')
          else:
-            self.__dict__[axis_name_to_twin+'_twiny'] = self.__dict__[
+            largest_twin_index += 1
+            new_twin_axis_name = axis_name_to_twin+f'_twiny{largest_twin_index}'
+            self.__dict__[new_twin_axis_name] = self.__dict__[
                                            axis_name_to_twin].twiny()
+            if spline_shift >= 1.0:
+               self.__dict__[new_twin_axis_name].spines.top.set_position(
+                                                      ("axes", spline_shift))
+            elif spline_shift < 0.0:
+               self.__dict__[new_twin_axis_name].spines.bottom.set_position(
+                                                      ("axes", spline_shift))
+            else:
+               raise ValueError('spline_shift must be <0 or >=1')
       else:
          raise ValueError('The axis spline to twin "ax_twin" must be either '+
                           '"x" or "y"')
