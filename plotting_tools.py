@@ -492,11 +492,14 @@ class Plot2DLinear(PlottingTools):
                              int((1-q)*np.shape(self.y0)[1])-1]] )
       
          
-   def plot_continuous_data(self, axis_name, plot_handle_name=None,
+   def plot_continuous_data(self, axis_name, plot_handle_name:str=None,
                             uncertainty_band=False, uncertainty_band_steps = 1,
                             std_err_bars_x = False, std_err_bars_y = False,
                             color = 'Black', color_twin_axes=True, 
                             errorbar_parameters={}, **kwargs):
+
+      if axis_name[-7:-2] == 'twin' and plot_handle_name is None:
+         raise ValueError('plot_handle_name must be provided when using twin axes')
       
       if not isinstance(uncertainty_band_steps, int):
          raise TypeError('Uncertainty band steps must always be an integer')
