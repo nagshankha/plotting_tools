@@ -640,7 +640,7 @@ class Plot2DLinear(PlottingTools):
                                        alpha = alpha_arr[i]) )          
       
       if color_twin_axes:
-         if hasattr(self, axis_name+'_twinx'):
+         if hasattr(self, axis_name+'_twinx1'):
             self.__dict__[axis_name].yaxis.label.set_color(
                                    self.__dict__[plot_handle_name].get_color())
             self.__dict__[axis_name].tick_params(axis='y', which='both',
@@ -648,7 +648,7 @@ class Plot2DLinear(PlottingTools):
             self.__dict__[axis_name].spines.right.set_visible(False)
             self.__dict__[axis_name].spines.left.set_color(
                self.__dict__[plot_handle_name].get_color())
-         elif hasattr(self, axis_name+'_twiny'):
+         elif hasattr(self, axis_name+'_twiny1'):
             self.__dict__[axis_name].xaxis.label.set_color(
                                    self.__dict__[plot_handle_name].get_color())
             self.__dict__[axis_name].tick_params(axis='x', which='both',
@@ -656,7 +656,7 @@ class Plot2DLinear(PlottingTools):
             self.__dict__[axis_name].spines.top.set_visible(False)
             self.__dict__[axis_name].spines.bottom.set_color(
                self.__dict__[plot_handle_name].get_color())            
-         if axis_name[-6:] == '_twinx':
+         if axis_name[-7:-1] == '_twinx':
             self.__dict__[axis_name].yaxis.label.set_color(
                                    self.__dict__[plot_handle_name].get_color())
             self.__dict__[axis_name].tick_params(axis='y', which='both',
@@ -664,7 +664,7 @@ class Plot2DLinear(PlottingTools):
             self.__dict__[axis_name].spines.left.set_visible(False)
             self.__dict__[axis_name].spines.right.set_color(
                self.__dict__[plot_handle_name].get_color())
-         elif axis_name[-6:] == '_twiny':
+         elif axis_name[-7:-1] == '_twiny':
             self.__dict__[axis_name].xaxis.label.set_color(
                                    self.__dict__[plot_handle_name].get_color())
             self.__dict__[axis_name].tick_params(axis='x', which='both',
